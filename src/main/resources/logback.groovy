@@ -24,7 +24,7 @@ if (StringUtils.isEmpty(ENV)) {
         }
 
         encoder(LogstashEncoder) {
-            includeMdcKeyNames = ["requestId"]
+            includeMdcKeyNames = ["traceId"]
         }
     }
 

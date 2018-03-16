@@ -18,6 +18,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Configuration
 public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
@@ -58,6 +59,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         //设置请求信息
         MDC.put(Constants.APP_NAME, appName);
         MDC.put(Constants.APP_VERSION, appVersion);
+        MDC.put("traceId", UUID.randomUUID().toString());
         //语言国际化，有需要开启
         //LocaleContextHolder.setLocale(StringUtils.isEmpty(lang) ? Constants.DEFAULT_LANG : Locale.forLanguageTag(lang));
 
