@@ -48,8 +48,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         String appName = request.getHeader(Constants.APP_NAME);
         String appVersion = request.getHeader(Constants.APP_VERSION);
         //String lang = request.getHeader(Constants.LANG);
-        String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
-        if (StringUtils.isEmpty(appName) || StringUtils.isEmpty(appVersion) || StringUtils.isEmpty(contentType)) {
+        if (StringUtils.isEmpty(appName) || StringUtils.isEmpty(appVersion)) {
             throw new SystemException(ExceptionCode.HANDLER_PARAM_ERROR.getCode(), "handler param is null!");
         }
 
@@ -61,11 +60,6 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         MDC.put(Constants.APP_VERSION, appVersion);
         //语言国际化，有需要开启
         //LocaleContextHolder.setLocale(StringUtils.isEmpty(lang) ? Constants.DEFAULT_LANG : Locale.forLanguageTag(lang));
-
-        //检查content_type
-        if (!MediaType.APPLICATION_JSON_UTF8.equals(MediaType.valueOf(contentType))) {
-            throw new SystemException(ExceptionCode.HANDLER_PARAM_ERROR.getCode(), "content type must be application/json; charset=UTF-8");
-        }
 
         //检查token，标记UncheckToken不检查token
         if (!((HandlerMethod) handler).getMethod().isAnnotationPresent(UncheckToken.class)) {
