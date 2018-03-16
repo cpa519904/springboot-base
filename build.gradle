@@ -30,12 +30,9 @@ dependencies {
 	runtime('mysql:mysql-connector-java')
 	compile('org.springframework.boot:spring-boot-starter-amqp')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.apache.httpcomponents:fluent-hc:4.5.2')
-	compile('com.aliyun:aliyun-java-sdk-sts:2.1.6')
-	compile('com.aliyun:aliyun-java-sdk-core:2.1.7')
-	compile('com.aliyun.oss:aliyun-sdk-oss:2.5.0')
 	compile('org.codehaus.groovy:groovy')
 	compileOnly('org.projectlombok:lombok:1.16.16')
+	compile('net.logstash.logback:logstash-logback-encoder:4.8')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

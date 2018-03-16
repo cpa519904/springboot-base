@@ -1,31 +1,31 @@
-import org.springframework.util.StringUtils
+import net.logstash.logback.encoder.LogstashEncoder
 
-String env = System.getProperty("spring.profiles.active")
 
-if (StringUtils.isEmpty(env)) {
-    appender("CONSOLE", ConsoleAppender) {
+def final LOCATION = "/data/log/app/"
+def final SERVER_NAME = "sprite-zuul"
+def final SAVE_TIME_RANGE = 7
+String ENV = System.getProperty("env")
+
+if (ENV.equals("dev")) {
+    appender('CONSOLE', ConsoleAppender) {
         encoder(PatternLayoutEncoder) {
-            pattern = "%d{yyyy/MM/dd-HH:mm:ss} %-5level [%thread] %class{5}:%line>>%msg%n"
+            pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} %relative [%thread] %-5level %logger{36} %X{requestId} - %msg%n"
         }
     }
 
     root(INFO, ['CONSOLE'])
-} else {
-    appender('FILE', RollingFileAppender) {
-        def location = "/data/log/app/base/"
 
+} else {
+    appender('FILE-INFO', RollingFileAppender) {
         rollingPolicy(TimeBasedRollingPolicy) {
-            fileNamePattern = location + "logFile.%d{yyyy-MM-dd}.log.gz"
-            if (env.equals('prod')) {
-                fileNamePattern = location + "logFile.dev.%d{yyyy-MM-dd}.log.gz"
-            }
-            maxHistory = 15
+            fileNamePattern = String.format("%s%s/%s%s%s", LOCATION, SERVER_NAME, "logFile.", ENV, ".%d{yyyy-MM-dd}.log.gz")
+            maxHistory = SAVE_TIME_RANGE
         }
 
-        encoder(PatternLayoutEncoder) {
-            pattern = "%d{yyyy/MM/dd-HH:mm:ss} %-5level [%thread] %class{5}:%line>>%msg%n"
+        encoder(LogstashEncoder) {
+            includeMdcKeyNames = ["requestId"]
         }
     }
 
-    root(INFO, ['FILE'])
+    root(INFO, ['FILE-INFO'])
 }
