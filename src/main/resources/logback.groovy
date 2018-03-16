@@ -1,12 +1,13 @@
 import net.logstash.logback.encoder.LogstashEncoder
+import org.springframework.util.StringUtils
 
 
 def final LOCATION = "/data/log/app/"
-def final SERVER_NAME = "sprite-zuul"
+def final SERVER_NAME = "base"
 def final SAVE_TIME_RANGE = 7
 String ENV = System.getProperty("env")
 
-if (ENV.equals("dev")) {
+if (StringUtils.isEmpty(ENV)) {
     appender('CONSOLE', ConsoleAppender) {
         encoder(PatternLayoutEncoder) {
             pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} %relative [%thread] %-5level %logger{36} %X{requestId} - %msg%n"
