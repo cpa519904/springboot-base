@@ -2,13 +2,16 @@ package com.company.pojo.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
+@MappedSuperclass
 class BaseModel {
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private long id;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

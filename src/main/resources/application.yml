@@ -3,15 +3,15 @@ spring:
     name: springboot-base
 
   jpa:
-      database-platform: org.hibernate.dialect.MySQL5Dialect
-      hibernate:
-        ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: update
 
-    datasource:
-      url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false
-      username: root
-      password:
-      driver-class-name: com.mysql.jdbc.Driver
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test?useSSL=false
+    username: root
+    password: wsq123
+    driver-class-name: com.mysql.jdbc.Driver
 
 server:
   port: 9000

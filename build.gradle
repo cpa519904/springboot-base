@@ -30,6 +30,7 @@ dependencies {
 	runtime('mysql:mysql-connector-java')
 	compile('org.springframework.boot:spring-boot-starter-amqp')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.apache.httpcomponents:fluent-hc:4.5.2')
 	compile('org.codehaus.groovy:groovy')
 	compileOnly('org.projectlombok:lombok:1.16.16')
