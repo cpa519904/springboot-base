@@ -37,7 +37,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
                     return true;
                 }
 
-                interceptorHandler(request, handler);
+                //interceptorHandler(request, handler);
 
                 return true;
             }
@@ -63,16 +63,6 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         //语言国际化，有需要开启
         //LocaleContextHolder.setLocale(StringUtils.isEmpty(lang) ? Constants.DEFAULT_LANG : Locale.forLanguageTag(lang));
 
-        //检查token，标记UncheckToken不检查token
-        if (!((HandlerMethod) handler).getMethod().isAnnotationPresent(UncheckToken.class)) {
-            String token = "";
-            token = Utils.getCookieByName(request.getCookies(), Constants.COOKILE_TOKEN);
-
-            //TODO 校验token步骤
-            //if (StringUtils.isEmpty(token) &&  ){
-            //    throw new SystemException(ExceptionCode.NEED_LOGIN.getCode(), "token is over time");
-            //}
-        }
     }
 
 }

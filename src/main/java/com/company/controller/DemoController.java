@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.pojo.entity.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
 
     @RequestMapping("/demo")
-    public String demo() {
+    public User demo() {
 
-//        User user  = new User();
-//        user.setId(1);
-//        user.setUsername("shdjak");
+        User user  = new User();
+        user.setId(1);
+        user.setUsername("shdjak");
 
-        return "123";
+        return user;
     }
 }
