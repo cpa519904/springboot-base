@@ -19,6 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private Securityservice securityservice;
 
+    @Autowired
+    private RemembermeService remembermeService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //并根据传入的AuthenticationManagerBuilder中的userDetailsService方法来接收我们自定义的认证方法。
@@ -46,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .and()
                 .rememberMe()
+                .rememberMeServices(remembermeService)
                 .tokenValiditySeconds(1209600);
                 //.key("wsq");    //默认的生成token用的key，但是重写后这个key没有用了
 

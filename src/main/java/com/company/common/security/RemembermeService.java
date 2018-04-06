@@ -6,12 +6,11 @@ import com.company.dao.UserDao;
 import com.company.pojo.entity.User;
 import com.company.pojo.po.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-@Configuration
+@Component
 public class RemembermeService extends TokenBasedRememberMeServices {
     @Autowired
     private UserDao userDao;
@@ -35,6 +34,8 @@ public class RemembermeService extends TokenBasedRememberMeServices {
         if (cookieTokens.length != 2) {
             throw new ServiceException(ExceptionCode.NEED_LOGIN.getCode(), "cookie丢失");
         }
+
+        //量大了，从redis读取，如果没读取到到数据库去读取，都没有则返回异常。
 
         User user = userDao.findByUsernameAndToken(cookieTokens[0], cookieTokens[1]);
 
@@ -69,6 +70,8 @@ public class RemembermeService extends TokenBasedRememberMeServices {
         User user = ((SecurityUser) userDetails).getUser();
         user.setToken(token);
         user.setExpiryTime(expiryTime);
+
+        //量大了加缓存策略，redis的map，username-token做key，expiryTime做value
 
         userDao.save(user);
     }
