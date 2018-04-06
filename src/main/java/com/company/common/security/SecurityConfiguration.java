@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //并根据传入的AuthenticationManagerBuilder中的userDetailsService方法来接收我们自定义的认证方法。
         //且该方法必须要实现UserDetailsService这个接口。
         auth.userDetailsService(securityservice)
-                .passwordEncoder(new BCryptPasswordEncoder());
+                .passwordEncoder(new Md5PasswordEncoder());
     }
 
     @Override
@@ -47,8 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .and()
                 .rememberMe()
-                .tokenValiditySeconds(1209600)
-                .key("wsq");
+                .tokenValiditySeconds(1209600);
+                //.key("wsq");    //默认的生成token用的key，但是重写后这个key没有用了
 
         http.formLogin()
                 .and()
