@@ -2,6 +2,8 @@ package com.company.pojo.entity;
 
 
 import lombok.Data;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -14,5 +16,6 @@ public class User extends BaseModel {
     private String password;
     private String role;
     private String token;
+    @Column(nullable = false)
     private long expiryTime;
 }
