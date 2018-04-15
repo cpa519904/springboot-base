@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.common.annotations.UncheckToken;
 import com.company.pojo.entity.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ public class DemoController {
 
     @RequestMapping("/demo")
     @RolesAllowed("ADMIN")
+    @UncheckToken
     public User demo() {
 
         User user  = new User();
