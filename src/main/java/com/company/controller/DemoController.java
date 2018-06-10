@@ -11,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 @RequestMapping("base")
 public class DemoController {
 
-    @RequestMapping("/demo")
+        @RequestMapping("/demo")
     @RolesAllowed("ADMIN")
     @UncheckToken
     public User demo() {
@@ -22,4 +22,5 @@ public class DemoController {
 
         return user;
     }
+
 }

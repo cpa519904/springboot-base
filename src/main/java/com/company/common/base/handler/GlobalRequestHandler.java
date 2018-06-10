@@ -27,7 +27,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
             @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-                //interceptorHandler(request, handler);
+                interceptorHandler(request, handler);
 
                 return true;
             }

@@ -7,13 +7,13 @@ def final SERVER_NAME = "base"
 def final SAVE_TIME_RANGE = 7
 String ENV = System.getProperty("env")
 
-if (StringUtils.isEmpty(ENV)) {
-    appender('CONSOLE', ConsoleAppender) {
-        encoder(PatternLayoutEncoder) {
-            pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} %relative [%thread] %-5level %logger{36} %X{requestId} - %msg%n"
-        }
+appender('CONSOLE', ConsoleAppender) {
+    encoder(PatternLayoutEncoder) {
+        pattern = "%d{yyyy-MM-dd HH:mm:ss.SSS} %relative [%thread] %-5level %logger{36} %X{requestId} - %msg%n"
     }
+}
 
+if (StringUtils.isEmpty(ENV)) {
     root(INFO, ['CONSOLE'])
 
 } else {
@@ -28,5 +28,5 @@ if (StringUtils.isEmpty(ENV)) {
         }
     }
 
-    root(INFO, ['FILE-INFO'])
+    root(INFO, ['CONSOLE', 'FILE-INFO'])
 }

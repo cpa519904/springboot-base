@@ -2,6 +2,7 @@ package com.company.common.base.handler;
 
 import com.company.common.annotations.UncheckToken;
 import com.company.common.base.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -30,11 +31,14 @@ public class GlobalResponseHandler extends WebMvcRegistrationsAdapter {
      *  注：ReturnValueHandlers调用视图转换器，所以在此处替换returnValue
      */
 
+    @Autowired
+    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
+
     @Override
     public RequestMappingHandlerAdapter getRequestMappingHandlerAdapter() {
         RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
         List<HandlerMethodReturnValueHandler> handlerList = new ArrayList<>();
-        handlerList.add(new RequestResponseBodyMethodProcessor(Collections.singletonList(new MappingJackson2HttpMessageConverter())) {
+        handlerList.add(new RequestResponseBodyMethodProcessor(Collections.singletonList(mappingJackson2HttpMessageConverter)) {
             @Override
             public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
                 super.handleReturnValue(packageResult(returnValue, returnType), returnType, mavContainer, webRequest);
