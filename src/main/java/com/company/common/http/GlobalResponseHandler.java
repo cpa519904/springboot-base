@@ -1,7 +1,7 @@
-package com.company.common.base.handler;
+package com.company.common.http;
 
 import com.company.common.annotations.UncheckToken;
-import com.company.common.base.Response;
+import com.company.pojo.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
 import org.springframework.core.MethodParameter;

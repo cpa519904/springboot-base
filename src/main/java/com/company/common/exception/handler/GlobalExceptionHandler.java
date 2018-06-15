@@ -1,7 +1,7 @@
 package com.company.common.exception.handler;
 
 import com.company.common.exception.ServiceException;
-import com.company.common.base.Response;
+import com.company.pojo.vo.Response;
 import com.company.common.exception.ExceptionCode;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
