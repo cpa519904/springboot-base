@@ -38,6 +38,7 @@ public class GlobalResponseHandler extends WebMvcRegistrationsAdapter {
     public RequestMappingHandlerAdapter getRequestMappingHandlerAdapter() {
         RequestMappingHandlerAdapter requestMappingHandlerAdapter = new RequestMappingHandlerAdapter();
         List<HandlerMethodReturnValueHandler> handlerList = new ArrayList<>();
+        //采用匿名内部类使代码更简洁，此处也可以用lambda或者继承
         handlerList.add(new RequestResponseBodyMethodProcessor(Collections.singletonList(mappingJackson2HttpMessageConverter)) {
             @Override
             public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
@@ -51,7 +52,7 @@ public class GlobalResponseHandler extends WebMvcRegistrationsAdapter {
     private Object packageResult(Object data, MethodParameter returnType) {
         Annotation annotation = returnType.getMethod().getAnnotation(UncheckToken.class);
 
-        if (annotation instanceof UncheckToken) {
+        if (annotation != null) {
             return data;
         }
 

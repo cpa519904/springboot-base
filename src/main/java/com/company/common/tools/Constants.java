@@ -11,8 +11,5 @@ public class Constants {
     public static final String COOKILE_TOKEN = "token";
     public static final String APP_NAME = "appName";
     public static final String APP_VERSION = "appVersion";
-
-    //mq
-    public static final String ORDER_CACHE_QUEUE_NAME = "order.cache";
-    public static final String ORDER_DEAD_LETTER_QUEUE_NAME = "order.dlx";
+    public static final String SIGN = "sign";
 }

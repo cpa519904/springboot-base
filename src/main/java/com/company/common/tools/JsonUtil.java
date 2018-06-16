@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
 
-public class Json {
+public class JsonUtil {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final Logger logger = LoggerFactory.getLogger(Json.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class.getName());
 
     /**
      * 类或者集合转成json字符串

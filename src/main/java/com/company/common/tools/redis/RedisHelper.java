@@ -2,8 +2,7 @@ package com.company.common.tools.redis;
 
 import com.company.common.exception.ExceptionCode;
 import com.company.common.exception.SystemException;
-import com.company.common.tools.Json;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.company.common.tools.JsonUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class RedisHelper {
 
         Object value;
         try {
-            value = Json.String2Object(content, clazz);
+            value = JsonUtil.String2Object(content, clazz);
         } catch (Exception e) {
             logger.error("read Value is error", e);
             throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis readValue error");
@@ -45,7 +44,7 @@ public class RedisHelper {
 
         Object value;
         try {
-            value = Json.String2Collection(content, valueTypeRef);
+            value = JsonUtil.String2Collection(content, valueTypeRef);
         } catch (Exception e) {
             logger.error("read TypeReferenceValue is error", e);
             throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis read TypeReferenceValue error");
@@ -130,7 +129,7 @@ public class RedisHelper {
     private static String writeValueAsString(Object value) {
         String content;
         try {
-            content = Json.Object2String(value);
+            content = JsonUtil.Object2String(value);
         } catch (Exception e) {
             logger.error("把Object转换为String错误", e);
             throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis writeValueAsString JsonProcessingException");

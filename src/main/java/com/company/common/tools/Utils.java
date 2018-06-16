@@ -1,5 +1,7 @@
 package com.company.common.tools;
 
+import sun.security.provider.MD5;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -74,5 +76,15 @@ public class Utils {
         JAXBContext context = JAXBContext.newInstance(load);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (T)unmarshaller.unmarshal(new StringReader(xml));
+    }
+
+    //验签
+    public static boolean checkSign(String paramData, String sign, String secretKey) {
+        String trueSign = SecurityUtil.MD5(paramData +secretKey);
+        if (trueSign.equals(sign)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
