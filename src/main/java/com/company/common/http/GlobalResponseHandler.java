@@ -50,12 +50,6 @@ public class GlobalResponseHandler extends WebMvcRegistrationsAdapter {
     }
 
     private Object packageResult(Object data, MethodParameter returnType) {
-        Annotation annotation = returnType.getMethod().getAnnotation(UncheckToken.class);
-
-        if (annotation != null) {
-            return data;
-        }
-
         Response response = new Response();
         response.setData(data);
         return response;

@@ -11,5 +11,6 @@ public class Constants {
     public static final String COOKILE_TOKEN = "token";
     public static final String APP_NAME = "appName";
     public static final String APP_VERSION = "appVersion";
+    public static final String LANG = "lang";
     public static final String SIGN = "sign";
 }

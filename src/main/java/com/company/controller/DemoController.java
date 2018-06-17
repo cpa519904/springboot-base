@@ -3,6 +3,7 @@ package com.company.controller;
 import com.company.common.annotations.UncheckToken;
 import com.company.pojo.entity.User;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
@@ -11,14 +12,14 @@ import javax.annotation.security.RolesAllowed;
 @RequestMapping("base")
 public class DemoController {
 
-        @RequestMapping("/demo")
+    @RequestMapping("/demo")
     @RolesAllowed("ADMIN")
     @UncheckToken
-    public User demo() {
+    public User demo(@RequestParam("zh") String zh) {
 
-        User user  = new User();
+        User user = new User();
         user.setId(1);
-        user.setUsername("shdjak");
+        user.setUsername(zh);
 
         return user;
     }
