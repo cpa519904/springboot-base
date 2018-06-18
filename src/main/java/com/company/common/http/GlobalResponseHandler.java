@@ -1,6 +1,7 @@
 package com.company.common.http;
 
 import com.company.common.annotations.UncheckToken;
+import com.company.common.tools.ThreadLocalUtil;
 import com.company.pojo.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.WebMvcRegistrationsAdapter;
@@ -46,10 +47,19 @@ public class GlobalResponseHandler extends WebMvcRegistrationsAdapter {
             }
         });
         requestMappingHandlerAdapter.setReturnValueHandlers(handlerList);
+
+        //清楚缓存
+        ThreadLocalUtil.clean();
         return requestMappingHandlerAdapter;
     }
 
     private Object packageResult(Object data, MethodParameter returnType) {
+        Annotation annotation = returnType.getMethod().getAnnotation(UncheckToken.class);
+
+        if (annotation != null) {
+            return data;
+        }
+
         Response response = new Response();
         response.setData(data);
         return response;

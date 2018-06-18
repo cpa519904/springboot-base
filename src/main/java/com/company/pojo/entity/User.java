@@ -15,7 +15,4 @@ public class User extends BaseModel {
     private String username;
     private String password;
     private String role;
-    private String token;
-    @Column(nullable = false)
-    private long expiryTime;
 }

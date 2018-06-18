@@ -9,7 +9,9 @@ public enum ExceptionCode {
     NO_HANDLER_ERROR(2002),
     PARAM_TYPE_ERROR(2003),
     //业务(后端)错误300x
-    SERVICE_ERROR(3000);
+    SERVICE_ERROR(3000),
+    USERNAME_OR_PASSWORD_ERROR(3001),
+    AUTH_ERROR(3002);
 
     private int code;
 

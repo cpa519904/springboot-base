@@ -1,8 +1,5 @@
 package com.company.common.tools;
 
-import org.apache.commons.codec.binary.Base64;
-
-import java.net.URLDecoder;
 import java.security.MessageDigest;
 
 public class SecurityUtil {
