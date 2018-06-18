@@ -1,12 +1,9 @@
-package com.company.pojo.entity;
-
+package com.company.pojo.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Entity
 @Data

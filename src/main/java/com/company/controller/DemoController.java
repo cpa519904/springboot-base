@@ -7,7 +7,9 @@ import com.company.common.tools.Constants;
 import com.company.common.tools.Utils;
 import com.company.common.tools.redis.RedisHelper;
 import com.company.dao.UserDao;
-import com.company.pojo.entity.User;
+import com.company.pojo.entity.CurrentUser;
+import com.company.pojo.model.User;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,8 +43,9 @@ public class DemoController {
             throw new ServiceException(ExceptionCode.USERNAME_OR_PASSWORD_ERROR.getCode(), "用户名密码错误");
         } else {
             String key = UUID.randomUUID().toString();
-            user.setPassword("");
-            redisHelper.writeValue(key, user, Long.parseLong(rememberMeTime));
+            CurrentUser currentUser = new CurrentUser();
+            BeanUtils.copyProperties(user, currentUser);
+            redisHelper.writeObject(key, currentUser, Long.parseLong(rememberMeTime));
             Utils.setCookie(response, Constants.TOKEN, key, Integer.parseInt(rememberMeTime));
         }
 

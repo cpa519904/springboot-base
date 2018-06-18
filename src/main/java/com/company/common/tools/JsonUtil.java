@@ -20,7 +20,7 @@ public class JsonUtil {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (Exception e) {
-            logger.error(MessageFormat.format("对象转String发生错误", e.getMessage()));
+            logger.error("对象转String发生错误", e);
         }
         return null;
     }
@@ -33,7 +33,7 @@ public class JsonUtil {
         try {
             return objectMapper.readValue(json, object);
         } catch (Exception e) {
-            logger.error(MessageFormat.format("String转对象发生错误", e.getMessage()));
+            logger.error("String转对象发生错误", e);
         }
 
         return null;
@@ -48,7 +48,7 @@ public class JsonUtil {
         try {
             return objectMapper.readValue(json, typeReference);
         } catch (Exception e) {
-            logger.error(MessageFormat.format("String转集合发生错误", e.getMessage()));
+            logger.error("String转集合发生错误", e);
         }
 
         return null;

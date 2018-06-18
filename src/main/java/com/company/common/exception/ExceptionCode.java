@@ -1,17 +1,16 @@
 package com.company.common.exception;
 
 public enum ExceptionCode {
-    //系统错误为1000
-    SYSTEM_ERROR(1000),
+    //系统错误为-1
+    SYSTEM_ERROR(-1),
     //前端错误200x
     HANDLER_PARAM_ERROR(2000),
     NEED_LOGIN(2001),
-    NO_HANDLER_ERROR(2002),
-    PARAM_TYPE_ERROR(2003),
     //业务(后端)错误300x
     SERVICE_ERROR(3000),
     USERNAME_OR_PASSWORD_ERROR(3001),
-    AUTH_ERROR(3002);
+    AUTH_ERROR(3002),
+    SIGN_ERROR(3003);
 
     private int code;
 

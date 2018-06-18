@@ -1,6 +1,5 @@
 package com.company.common.tools.redis;
 
-import com.company.common.exception.ExceptionCode;
 import com.company.common.exception.SystemException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -31,7 +30,7 @@ public class RedisHelper {
             content = stringRedisTemplate.opsForValue().get(key);
         } catch (Exception e) {
             logger.error("getFromRedis error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "getFromRedis Exception");
+            throw new SystemException("getFromRedis Exception");
         }
         return content;
     }
@@ -48,7 +47,7 @@ public class RedisHelper {
             value = objectMapper.readValue(content, clazz);
         } catch (IOException e) {
             logger.error("read Value is error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis readValue error");
+            throw new SystemException("redis readValue error");
         }
 
         return value;
@@ -66,34 +65,52 @@ public class RedisHelper {
             value = objectMapper.readValue(content, valueTypeRef);
         } catch (IOException e) {
             logger.error("read TypeReferenceValue is error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis read TypeReferenceValue error");
+            throw new SystemException("redis read TypeReferenceValue error");
         }
 
         return value;
     }
 
-    public void writeValue(String key, Object value) {
-        String content = writeValueAsString(value);
-        setToRedis(key, content);
+    private void writeString(String key, String content) {
+        try {
+            stringRedisTemplate.opsForValue().set(key, content);
+        } catch (Exception e) {
+            logger.error("setToRedis error", e);
+            throw new SystemException("setToRedis Exception");
+        }
     }
 
-    public void writeValue(String key, Object value, long timeout) {
+    public void writeString(String key, String content, long timeout) {
+        try {
+            stringRedisTemplate.opsForValue().set(key, content, timeout, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("setToRedis error", e);
+            throw new SystemException("setToRedis Exception");
+        }
+    }
+
+    public void writeObject(String key, Object value) {
         String content = writeValueAsString(value);
-        setToRedis(key, content, timeout);
+        writeString(key, content);
+    }
+
+    public void writeObject(String key, Object value, long timeout) {
+        String content = writeValueAsString(value);
+        writeString(key, content, timeout);
     }
 
     public void putValue(String key, Object value) {
         Long timeOut = this.getTimeOut(key);
         if (timeOut != null && timeOut > 0L) {
-            this.writeValue(key, value, timeOut);
+            this.writeObject(key, value, timeOut);
         } else {
-            this.writeValue(key, value);
+            this.writeObject(key, value);
         }
 
     }
 
     public Long getTimeOut(String key) {
-        return stringRedisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
+        return stringRedisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
     public void delete(String key) {
@@ -101,7 +118,7 @@ public class RedisHelper {
             stringRedisTemplate.delete(key);
         } catch (Exception e) {
             logger.error("delete error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis delete key error");
+            throw new SystemException("redis delete key error");
         }
     }
 
@@ -111,7 +128,7 @@ public class RedisHelper {
             result = stringRedisTemplate.opsForValue().setIfAbsent(key, value);
         } catch (Exception e) {
             logger.error("setIfAbsent error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis setIfAbsent error");
+            throw new SystemException("redis setIfAbsent error");
         }
         return result;
     }
@@ -121,7 +138,7 @@ public class RedisHelper {
             stringRedisTemplate.opsForZSet().add(key, member, score);
         } catch (Exception e) {
             logger.error("writeIntoSortedSet error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis writeIntoSortedSet error");
+            throw new SystemException("redis writeIntoSortedSet error");
         }
     }
 
@@ -130,7 +147,7 @@ public class RedisHelper {
             stringRedisTemplate.opsForZSet().remove(key, member);
         } catch (Exception e) {
             logger.error("deleteFromSortedSet error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis deleteFromSortedSet error");
+            throw new SystemException("redis deleteFromSortedSet error");
         }
     }
 
@@ -140,7 +157,7 @@ public class RedisHelper {
             result = stringRedisTemplate.opsForZSet().rangeByScore(key, min, max);
         } catch (Exception e) {
             logger.error("readFromSortedSetRangeByScore error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis readFromSortedSetRangeByScore error");
+            throw new SystemException("redis readFromSortedSetRangeByScore error");
         }
         return result;
     }
@@ -151,26 +168,8 @@ public class RedisHelper {
             content = objectMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
             logger.error("把Object转换为String错误", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "redis writeValueAsString JsonProcessingException");
+            throw new SystemException("redis writeValueAsString JsonProcessingException");
         }
         return content;
-    }
-
-    private void setToRedis(String key, String content, long timeout) {
-        try {
-            stringRedisTemplate.opsForValue().set(key, content, timeout, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            logger.error("setToRedis error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "setToRedis Exception");
-        }
-    }
-
-    private void setToRedis(String key, String content) {
-        try {
-            stringRedisTemplate.opsForValue().set(key, content);
-        } catch (Exception e) {
-            logger.error("setToRedis error", e);
-            throw new SystemException(ExceptionCode.SYSTEM_ERROR.getCode(), "setToRedis Exception");
-        }
     }
 }

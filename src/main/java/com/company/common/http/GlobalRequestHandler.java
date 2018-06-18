@@ -9,7 +9,7 @@ import com.company.common.tools.JsonUtil;
 import com.company.common.tools.ThreadLocalUtil;
 import com.company.common.tools.Utils;
 import com.company.common.tools.redis.RedisHelper;
-import com.company.pojo.entity.User;
+import com.company.pojo.entity.CurrentUser;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +32,8 @@ import java.util.UUID;
 public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
     @Value("${rememberMe.time}")
     private String rememberMeTime;
+    @Value("${secretKey}")
+    private String secretKey;
 
     @Autowired
     private RedisHelper redisHelper;
@@ -71,7 +73,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         String appVersion = request.getHeader(Constants.APP_VERSION);
         String sign = request.getHeader(Constants.SIGN);
         if (StringUtils.isEmpty(appName) || StringUtils.isEmpty(appVersion) || StringUtils.isEmpty(sign)) {
-            throw new SystemException(ExceptionCode.HANDLER_PARAM_ERROR.getCode(), "handler param is null!");
+            throw new ServiceException(ExceptionCode.HANDLER_PARAM_ERROR.getCode(), "handler param is null!");
         }
 
         //设置请求信息
@@ -96,13 +98,13 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
             throw new ServiceException(ExceptionCode.NEED_LOGIN.getCode(), "token过期");
         } else {
             //刷新有效期
-            redisHelper.writeValue(token, userInfo, Long.parseLong(rememberMeTime));
+            redisHelper.writeString(token, userInfo, Long.parseLong(rememberMeTime));
             //缓存当前用户
-            User user = JsonUtil.String2Object(userInfo, User.class);
-            ThreadLocalUtil.set("currentUser", user);
+            CurrentUser currentUser = JsonUtil.String2Object(userInfo, CurrentUser.class);
+            ThreadLocalUtil.set(currentUser);
 
             //鉴权, 没写@RolesAllowed为任何权限均可访问
-            String userRole = user.getRole();
+            String userRole = currentUser.getRole();
             RolesAllowed rolesAllowed = ((HandlerMethod) handle).getMethod().getAnnotation(RolesAllowed.class);
             if (rolesAllowed != null && rolesAllowed.value().length != 0) {
                 if (!Arrays.asList(rolesAllowed.value()).contains(userRole)) {
@@ -120,7 +122,8 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
     private void verifySign(HttpServletRequest request) {
         String paramData = JsonUtil.Object2String(request.getParameterMap());
         String sign = request.getHeader(Constants.SIGN);
-        if (Utils.checkSign(paramData, sign, "")) {
+        if (!Utils.checkSign(paramData, sign, secretKey)) {
+            throw new ServiceException(ExceptionCode.SIGN_ERROR.getCode(), "签名错误");
         }
     }
 
