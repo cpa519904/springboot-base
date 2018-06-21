@@ -3,11 +3,8 @@ package com.company.common.http;
 import com.company.common.annotations.UncheckToken;
 import com.company.common.exception.ServiceException;
 import com.company.common.exception.SystemException;
-import com.company.common.tools.Constants;
+import com.company.common.tools.*;
 import com.company.common.exception.ExceptionCode;
-import com.company.common.tools.JsonUtil;
-import com.company.common.tools.ThreadLocalUtil;
-import com.company.common.tools.Utils;
 import com.company.common.tools.redis.RedisHelper;
 import com.company.pojo.entity.CurrentUser;
 import org.slf4j.MDC;
@@ -26,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 @Configuration
@@ -55,15 +53,15 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         };
     }
 
-    private void interceptorHandler(HttpServletRequest request, Object handler) {
+    private void interceptorHandler(HttpServletRequest request, Object handler) throws Exception{
         //校验参数
 //        checkParam(request);
         //校验token（token放在cookie和redis里，这是针对H5，如果是app可以放到response头里，用request头接收）
-        checkTokenAndRole(request, handler);
+//        checkTokenAndRole(request, handler);
         //语言国际化
 //        locale(request);
         //验签
-//        verifySign(request);
+        verifySign(request);
         //防重放
 //        antiReplay();
     }
@@ -119,8 +117,8 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
         LocaleContextHolder.setLocale(StringUtils.isEmpty(lang) ? Locale.SIMPLIFIED_CHINESE : Locale.forLanguageTag(lang));
     }
 
-    private void verifySign(HttpServletRequest request) {
-        String paramData = JsonUtil.Object2String(request.getParameterMap());
+    private void verifySign(HttpServletRequest request) throws Exception{
+        String paramData = "";
         String sign = request.getHeader(Constants.SIGN);
         if (!Utils.checkSign(paramData, sign, secretKey)) {
             throw new ServiceException(ExceptionCode.SIGN_ERROR.getCode(), "签名错误");
