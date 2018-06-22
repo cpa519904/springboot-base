@@ -23,5 +23,4 @@ server:
 ####### 业务自定义配置 ######
 rememberMe:
   time: 604800
-secretKey: 519c3a3b1ae6e8ffce51
 

@@ -52,7 +52,7 @@ public class DemoController {
         return "登入成功";
     }
 
-    @RequestMapping("/demo")
+    @RequestMapping("demo")
     @RolesAllowed("ROLE_ADMIN")
     public User demo(@RequestParam("zh") String zh) {
 

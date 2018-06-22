@@ -30,8 +30,6 @@ import java.util.UUID;
 public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
     @Value("${rememberMe.time}")
     private String rememberMeTime;
-    @Value("${secretKey}")
-    private String secretKey;
 
     @Autowired
     private RedisHelper redisHelper;
@@ -60,8 +58,6 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
 //        checkTokenAndRole(request, handler);
         //语言国际化
 //        locale(request);
-        //验签
-        verifySign(request);
         //防重放
 //        antiReplay();
     }
@@ -69,8 +65,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
     private void checkParam(HttpServletRequest request) {
         String appName = request.getHeader(Constants.APP_NAME);
         String appVersion = request.getHeader(Constants.APP_VERSION);
-        String sign = request.getHeader(Constants.SIGN);
-        if (StringUtils.isEmpty(appName) || StringUtils.isEmpty(appVersion) || StringUtils.isEmpty(sign)) {
+        if (StringUtils.isEmpty(appName) || StringUtils.isEmpty(appVersion)) {
             throw new ServiceException(ExceptionCode.HANDLER_PARAM_ERROR.getCode(), "handler param is null!");
         }
 
@@ -115,14 +110,6 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
     private void locale(HttpServletRequest request) {
         String lang = request.getHeader(Constants.LANG);
         LocaleContextHolder.setLocale(StringUtils.isEmpty(lang) ? Locale.SIMPLIFIED_CHINESE : Locale.forLanguageTag(lang));
-    }
-
-    private void verifySign(HttpServletRequest request) throws Exception{
-        String paramData = "";
-        String sign = request.getHeader(Constants.SIGN);
-        if (!Utils.checkSign(paramData, sign, secretKey)) {
-            throw new ServiceException(ExceptionCode.SIGN_ERROR.getCode(), "签名错误");
-        }
     }
 
     private void antiReplay() {

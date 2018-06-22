@@ -1,7 +1,5 @@
 package com.company.common.tools;
 
-import org.springframework.util.StringUtils;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -12,7 +10,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,19 +66,5 @@ public class Utils {
         JAXBContext context = JAXBContext.newInstance(load);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (T) unmarshaller.unmarshal(new StringReader(xml));
-    }
-
-    //验签
-    public static boolean checkSign(String paramData, String sign, String secretKey) throws Exception{
-        if (!StringUtils.isEmpty(paramData)){
-            paramData = Base64.getEncoder().encodeToString(paramData.getBytes("UTF-8"));
-        }
-
-        String trueSign = SecurityUtil.MD5(paramData + secretKey);
-        if (trueSign.compareToIgnoreCase(sign) == 0) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
