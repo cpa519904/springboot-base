@@ -80,7 +80,7 @@ public class GlobalRequestHandler extends WebMvcConfigurerAdapter {
             return;
         }
 
-        String token = Utils.getCookieByName(request.getCookies(), Constants.TOKEN);
+        String token = request.getHeader(Constants.TOKEN);
         if (StringUtils.isEmpty(token)) {
             throw new ServiceException(ExceptionCode.NEED_LOGIN.getCode(), "token缺失");
         }

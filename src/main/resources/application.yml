@@ -24,3 +24,5 @@ server:
 rememberMe:
   time: 604800
 
+secretKey: 1234567890
+

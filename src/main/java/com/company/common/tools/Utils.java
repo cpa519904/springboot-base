@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
+import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +39,8 @@ public class Utils {
     }
 
     //Object转map
-    public static Map<String, String> objectToMap(Object obj) throws IllegalAccessException {
-        Map<String, String> map = new HashMap<>();
+    //入参可以是hashmap或者treeMap
+    public static Map<String, String> objectToMap(Object obj, Map<String, String> map) throws IllegalAccessException {
         Class<?> clazz = obj.getClass();
         System.out.println(clazz);
         for (Field field : clazz.getDeclaredFields()) {
@@ -66,5 +67,23 @@ public class Utils {
         JAXBContext context = JAXBContext.newInstance(load);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (T) unmarshaller.unmarshal(new StringReader(xml));
+    }
+
+    /**
+     * md5 加密
+     */
+    public static String md5Encoding(String str) {
+        StringBuilder sb = new StringBuilder(32);
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(str.getBytes("utf-8"));
+
+            for (int i = 0; i < array.length; i++) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).toUpperCase().substring(1, 3));
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return sb.toString();
     }
 }

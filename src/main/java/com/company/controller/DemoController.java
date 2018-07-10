@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.common.annotations.CheckSign;
 import com.company.common.annotations.UncheckToken;
 import com.company.common.exception.ExceptionCode;
 import com.company.common.exception.ServiceException;
@@ -37,28 +38,29 @@ public class DemoController {
     public String login(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String key;
 
         User user = userDao.findByUsernameAndPassword(username, password);
         if (user == null) {
             throw new ServiceException(ExceptionCode.USERNAME_OR_PASSWORD_ERROR.getCode(), "用户名密码错误");
         } else {
-            String key = UUID.randomUUID().toString();
+            key = UUID.randomUUID().toString();
             CurrentUser currentUser = new CurrentUser();
             BeanUtils.copyProperties(user, currentUser);
             redisHelper.writeObject(key, currentUser, Long.parseLong(rememberMeTime));
-            Utils.setCookie(response, Constants.TOKEN, key, Integer.parseInt(rememberMeTime));
         }
 
-        return "登入成功";
+        return key;
     }
 
     @RequestMapping("demo")
+    @CheckSign
     @RolesAllowed("ROLE_ADMIN")
-    public User demo(@RequestParam("zh") String zh) {
+    public User demo(HttpServletRequest request) {
 
+        System.out.println(1);
         User user = new User();
         user.setId(1);
-        user.setUsername(zh);
 
         return user;
     }
