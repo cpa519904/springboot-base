@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public Response handlerException(Throwable throwable) {
-        logger.error("系统异常", throwable);
+        logger.error("全局异常捕获", throwable);
 
         Response response = new Response();
         response.setMeg("系统异常");

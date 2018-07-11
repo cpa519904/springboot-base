@@ -59,13 +59,11 @@ public class VerifySign {
         try {
             sign = SignUtil.generateSign(secretKey, map);
         } catch (Exception e) {
-            logger.error("验签异常", e);
             throw new SystemException("验签异常");
         }
 
 
         if (!sign.equalsIgnoreCase(trueSign)) {
-            logger.error("sign错误");
             throw new ServiceException(ExceptionCode.SIGN_ERROR.getCode(), "sign错误");
         }
 

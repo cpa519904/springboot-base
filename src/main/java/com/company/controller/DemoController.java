@@ -11,8 +11,11 @@ import com.company.dao.UserDao;
 import com.company.pojo.entity.CurrentUser;
 import com.company.pojo.model.User;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("base")
 public class DemoController {
+
     @Value("${rememberMe.time}")
     private String rememberMeTime;
 
@@ -58,7 +62,6 @@ public class DemoController {
     @RolesAllowed("ROLE_ADMIN")
     public User demo(HttpServletRequest request) {
 
-        System.out.println(1);
         User user = new User();
         user.setId(1);
 
